@@ -1,23 +1,52 @@
-import logo from './logo.svg';
 import './App.css';
+import {useEffect, useState} from "react";
+import MakeupProducts from "./Components/MakeupProducts";
 
 function App() {
+
+  const checkImageExists = async (url) => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      return response.ok;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const [makeupProducts, setMakeupProducts] = useState();
+
+  useEffect(() => {
+    const fetchMakeupProducts = async () => {
+      try {
+        const response = await fetch("https://makeup-api.herokuapp.com/api/v1/products.json");
+        const data = await response.json();
+
+        const filteredMakeupProducts = await Promise.all(data.map(async (makeupProduct) => {
+          const imgExists = await checkImageExists(makeupProduct.image_link);
+
+          if (imgExists) {
+            return {
+              name: makeupProduct.name,
+              date: makeupProduct.created_at.substring(0, 10),
+              img: makeupProduct.image_link
+            };
+          }
+          return null;
+        }));
+
+        const validMakeupProducts = filteredMakeupProducts.filter(product => product !== null);
+
+        setMakeupProducts(validMakeupProducts);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchMakeupProducts()
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <MakeupProducts items={makeupProducts} />
     </div>
   );
 }
