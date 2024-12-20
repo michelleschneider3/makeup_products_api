@@ -1,10 +1,12 @@
+import '../Style/MakeupProduct.css'
+
 function MakeupProduct(props) {
 
     return (
         <div>
-            <div>{props.name}</div>
+            <div className="name" >{props.name}</div>
             <div>{props.date}</div>
-            <img src={props.img} alt={props.name} />
+            <img className="image" src={props.img} alt={props.name} />
         </div>
     )
 }

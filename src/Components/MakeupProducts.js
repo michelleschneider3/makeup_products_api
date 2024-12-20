@@ -1,13 +1,14 @@
 import MakeupProduct from "./MakeupProduct";
+import '../Style/MakeupProducts.css'
 
 function MakeupProducts(props) {
 
     if (!props.items || props.items.length === 0) {
-        return <p>Loading products...</p>;  // או כל הודעת טעינה אחרת
+        return <p>Loading products...</p>;
     }
 
     return (
-        <div>
+        <div className="products">
             {
                props.items.map((item, index) => (
                    <MakeupProduct
