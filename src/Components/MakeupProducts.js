@@ -3,10 +3,6 @@ import '../Style/MakeupProducts.css'
 
 function MakeupProducts(props) {
 
-    if (!props.items || props.items.length === 0) {
-        return <p>Loading products...</p>;
-    }
-
     return (
         <div className="products">
             {

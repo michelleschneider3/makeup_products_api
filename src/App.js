@@ -4,6 +4,8 @@ import MakeupProducts from "./Components/MakeupProducts";
 
 function App() {
 
+  const [loading, setLoading] = useState(true);
+
   const checkImageExists = async (url) => {
     try {
       const response = await fetch(url, { method: 'HEAD' });
@@ -37,12 +39,16 @@ function App() {
         const validMakeupProducts = filteredMakeupProducts.filter(product => product !== null);
 
         setMakeupProducts(validMakeupProducts);
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     }
     fetchMakeupProducts()
   }, []);
+
+  if (loading) return <p className="loading-text">Loading products...</p>;
 
   return (
     <div className="App">
